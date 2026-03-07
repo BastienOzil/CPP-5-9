@@ -1,0 +1,98 @@
+
+═══════════════════════════════════════════════════════════════════════════════
+CPP5 - EXCEPTIONS ET CONCEPTION ORIENTÉE OBJET AVANCÉE
+═══════════════════════════════════════════════════════════════════════════════
+
+NOTIONS CLÉS:
+- Gestion d'exceptions      : try / catch / throw
+- Exceptions personnalisées : hériter de std::exception et surcharger what()
+- Classes imbriquées        : déclarer une classe à l'intérieur d'une autre
+- Forward declaration       : déclarer une classe sans inclure son header
+- Couplage faible           : faire interagir deux classes par référence sans dépendance circulaire
+- Pattern Template Method   : squelette d'algorithme dans la base, action déléguée aux dérivées
+- Dispatch table            : tableau nom → fonction pour sélection dynamique sans if/else
+- Fonctions statiques factories : créer des instances polymorphes sans objet
+
+─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ EX00 ─ Bureaucrat ─ ─ ─ ─ ─ ─ ─ ─
+
+1. Gestion d'exceptions (try / catch / throw)
+   - throw <objet> : lance une exception, interrompt l'exécution normale
+   - try { ... }   : encadre le code susceptible de lancer une exception
+   - catch (Type& e) { ... } : intercepte l'exception et gère l'erreur
+   - catch (std::exception& e) : attrape tout type d'exception standard
+   - L'exception remonte la pile d'appels jusqu'au premier catch compatible
+   - Si aucun catch ne correspond, std::terminate() est appelé (fin du programme)
+   - Préférer attraper par référence (const) pour éviter la copie
+
+2. Classes d'exception personnalisées
+   - Hériter de std::exception pour rester compatible avec l'infrastructure standard
+   - Surcharger: virtual const char* what() const throw();
+   - throw() après const indique que la méthode ne lance elle-même aucune exception
+   - Avantage: catchable via std::exception& tout en portant un message précis
+   - Définir plusieurs classes distinctes pour chaque cas d'erreur métier
+     (GradeTooHighException, GradeTooLowException)
+
+3. Classes imbriquées (nested classes)
+   - Déclarer la classe dans le bloc public (ou private/protected) de la classe parent
+   - Accès depuis l'extérieur via l'opérateur de résolution de portée ::
+     (Bureaucrat::GradeTooHighException)
+   - Regroupe logiquement des types dont le sens dépend de la classe englobante
+   - Pas d'accès automatique aux membres de la classe parent (pas de this partagé)
+
+─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ EX01 ─ Form ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─
+
+4. Déclaration anticipée (forward declaration)
+   - Syntaxe: class NomClasse; (une seule ligne, sans corps)
+   - Brise les dépendances circulaires entre headers
+     (Bureaucrat inclut Form, Form inclut Bureaucrat → boucle infinie)
+   - Suffit quand on n'utilise que des pointeurs ou des références dans le header
+   - Le header complet (#include "X.hpp") va dans le fichier .cpp correspondant
+
+5. Couplage faible entre classes
+   - Faire collaborer des objets de types différents sans que l'un ne connaisse
+     les détails internes de l'autre
+   - Passer les objets par référence entre méthodes (Form&, const Bureaucrat&)
+   - Déléguer la logique à la classe concernée plutôt que de tout centraliser
+     (signForm(Form& f) appelle f.beSigned(*this), la logique reste dans Form)
+   - Chaque classe garde sa responsabilité unique et son propre fichier
+
+─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ EX02 ─ AForm ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─
+  (classes abstraites et méthodes virtuelles pures → voir CPP4 dans Notes)
+
+6. Pattern Template Method
+   - Patron de conception: la classe de base définit le squelette d'un algorithme
+   - Les étapes spécifiques sont déléguées aux classes dérivées via une méthode virtuelle pure
+   - Centralise les vérifications communes (form signé ?, grade suffisant ?) dans execute()
+     de la classe de base AForm
+   - Les classes concrètes n'implémentent que executeAction(), sans re-vérifier les gardes
+   - Avantage: si la règle de vérification change, on ne modifie qu'un seul endroit
+
+─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ EX03 ─ Intern ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─
+
+7. Dispatch table (tableau de structures nom → fonction)
+   - Remplace une chaîne de if/else par un tableau associant une clé (string) à une fonction
+   - Structure interne: { std::string name; AForm* (*create)(const std::string&); }
+   - On remplit un tableau statique de ces structures, puis on itère dessus pour trouver
+     la correspondance et appeler la fonction associée
+   - Extensible: ajouter un nouveau type ne nécessite qu'une ligne dans le tableau
+   - Évolution du principe des pointeurs sur méthodes (CPP1) appliqué à la création d'objets
+
+8. Fonctions membres statiques comme factories
+   - Méthode static qui crée et retourne une instance d'un type dérivé (AForm*)
+   - Déclaration: static AForm* makeX(const std::string& target);
+   - static permet de stocker un pointeur vers la fonction dans un tableau
+     (impossible avec des méthodes non-statiques qui nécessitent une instance)
+   - L'appelant est responsable de libérer la mémoire retournée (delete)
+   - Retourner NULL en cas d'erreur pour signaler l'échec sans lancer d'exception
+
+───────────────────────────────────────────────────────────────────────────────
+RÉSUMÉ CPP5
+───────────────────────────────────────────────────────────────────────────────
+- try/catch/throw pour gérer les erreurs sans codes de retour
+- Sous-classer std::exception + surcharger what() pour exceptions métier précises
+- Nested classes pour regrouper types logiquement liés à leur classe parent
+- Forward declaration pour briser dépendances circulaires entre headers
+- Couplage faible: déléguer la logique à la classe concernée, passer par référence
+- Pattern Template Method: vérifications centralisées dans la base, action dans les dérivées
+- Dispatch table: tableau nom→fonction, extensible sans toucher à la logique de sélection
+- Fonctions statiques factories: créer des instances polymorphes stockables dans un tableau

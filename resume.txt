@@ -96,3 +96,88 @@ RÉSUMÉ CPP5
 - Pattern Template Method: vérifications centralisées dans la base, action dans les dérivées
 - Dispatch table: tableau nom→fonction, extensible sans toucher à la logique de sélection
 - Fonctions statiques factories: créer des instances polymorphes stockables dans un tableau
+
+
+═══════════════════════════════════════════════════════════════════════════════
+CPP6 - CONVERSIONS DE TYPES (CASTS)
+═══════════════════════════════════════════════════════════════════════════════
+
+NOTIONS CLÉS:
+- static_cast<>()           : conversion explicite entre types compatibles (compile-time)
+- Classes non-instantiables : constructeurs/destructeurs privés pour empêcher création d'objets
+- Détection de type literal : parsing de string pour identifier char, int, float, double
+- strtol/strtof/strtod      : conversion string → type numérique avec gestion d'erreurs
+- Valeurs spéciales         : nan, inf, -inf (IEEE 754)
+- std::isnan/std::isinf     : tester si un nombre est NaN ou infini
+- std::numeric_limits<>     : obtenir min/max d'un type (int, float, double)
+- std::setprecision()       : contrôler l'affichage des décimales
+
+─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ EX00 ─ ScalarConverter ─ ─ ─ ─ ─ ─ ─ ─
+
+1. static_cast<Type>()
+   - Conversion explicite entre types compatibles à la compilation
+   - Syntaxe: static_cast<int>(variable), static_cast<char>(42)
+   - Utilisé pour: promotions numériques (int→float), conversions explicites (float→int)
+   - Vérifié au compile-time, plus sûr que les C-casts (int)variable
+   - Ne fonctionne PAS pour les conversions entre pointeurs non-liés ou downcasts non sûrs
+
+2. Classe non-instantiable (static-only class)
+   - Constructeur, destructeur, copy constructor et opérateur d'affectation en private
+   - Empêche la création d'instances: ScalarConverter obj; // Erreur de compilation
+   - Toutes les méthodes doivent être static (pas besoin d'instance pour les appeler)
+   - Syntaxe d'appel: ScalarConverter::convert("42");
+   - Utile pour regrouper des fonctions utilitaires sans état
+
+3. Détection de type d'un literal
+   - Parser la string pour identifier le format: 'c', 42, 42.0f, 42.0
+   - Règles de détection:
+     * char   : longueur 3, format 'X'
+     * int    : que des chiffres (+ optionnel -)
+     * float  : contient '.', se termine par 'f'
+     * double : contient '.', pas de 'f' final
+   - Gérer aussi les pseudo-literals: nan, nanf, +inf, -inf, +inff, -inff
+
+4. Fonctions de conversion string → nombre (C standard library)
+   - strtol(str, NULL, 10) : string → long (base 10)
+   - strtof(str, NULL)     : string → float
+   - strtod(str, NULL)     : string → double
+   - Gestion d'erreurs via errno (ERANGE pour overflow)
+   - Plus robuste que atoi/atof (détection d'erreurs)
+
+5. Valeurs spéciales IEEE 754
+   - NaN (Not a Number)    : résultat d'opération invalide (0/0, sqrt(-1))
+   - +inf / -inf (infini)  : résultat d'overflow ou division par zéro
+   - Literals C++: nan, nanf, +inf, -inf, +inff, -inff
+   - Ces valeurs se propagent dans les calculs
+
+6. Tests de valeurs spéciales
+   - std::isnan(x) : true si x est NaN
+   - std::isinf(x) : true si x est +inf ou -inf
+   - #include <cmath>
+   - Nécessaire avant de faire des conversions (int ne peut pas représenter NaN/inf)
+
+7. std::numeric_limits<Type>
+   - #include <limits>
+   - std::numeric_limits<int>::min() : plus petite valeur représentable
+   - std::numeric_limits<int>::max() : plus grande valeur représentable
+   - Permet de vérifier si une conversion est possible sans overflow
+   - Fonctionne pour tous les types numériques (int, float, double, char, etc.)
+
+8. Contrôle de l'affichage des nombres flottants
+   - std::fixed : forcer notation décimale (pas scientifique)
+   - std::setprecision(n) : nombre de chiffres après la virgule
+   - #include <iomanip>
+   - Exemple: std::cout << std::fixed << std::setprecision(1) << 42.0 << "f";
+   - Affiche: 42.0f (toujours 1 décimale)
+
+───────────────────────────────────────────────────────────────────────────────
+RÉSUMÉ CPP6
+───────────────────────────────────────────────────────────────────────────────
+- static_cast<>() : conversion explicite type-safe, vérifiée à la compilation
+- Classe non-instantiable : constructeurs privés + méthodes static uniquement
+- Détection de type literal : parser le format string ('c', 42, 42.0f, 42.0)
+- strtol/strtof/strtod : conversion robuste string→nombre avec gestion d'erreurs
+- Valeurs spéciales : nan, inf gérant cas limites IEEE 754
+- std::isnan/isinf : tester valeurs spéciales avant conversion
+- std::numeric_limits<> : obtenir limites min/max pour vérifier overflow
+- std::fixed + setprecision() : contrôler affichage formaté des nombres

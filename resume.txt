@@ -3,181 +3,119 @@
 CPP5 - EXCEPTIONS ET CONCEPTION ORIENTÉE OBJET AVANCÉE
 ═══════════════════════════════════════════════════════════════════════════════
 
-NOTIONS CLÉS:
-- Gestion d'exceptions      : try / catch / throw
-- Exceptions personnalisées : hériter de std::exception et surcharger what()
-- Classes imbriquées        : déclarer une classe à l'intérieur d'une autre
-- Forward declaration       : déclarer une classe sans inclure son header
-- Couplage faible           : faire interagir deux classes par référence sans dépendance circulaire
-- Pattern Template Method   : squelette d'algorithme dans la base, action déléguée aux dérivées
-- Dispatch table            : tableau nom → fonction pour sélection dynamique sans if/else
-- Fonctions statiques factories : créer des instances polymorphes sans objet
+1. Gestion d'exceptions
+   - throw lance une exception et interrompt l'exécution
+   - try encadre le code à risque, catch intercepte et gère l'erreur
+   - L'exception remonte la pile jusqu'au premier catch compatible
+   - Attraper par référence (const) pour éviter la copie
 
-─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ EX00 ─ Bureaucrat ─ ─ ─ ─ ─ ─ ─ ─
-
-1. Gestion d'exceptions (try / catch / throw)
-   - throw <objet> : lance une exception, interrompt l'exécution normale
-   - try { ... }   : encadre le code susceptible de lancer une exception
-   - catch (Type& e) { ... } : intercepte l'exception et gère l'erreur
-   - catch (std::exception& e) : attrape tout type d'exception standard
-   - L'exception remonte la pile d'appels jusqu'au premier catch compatible
-   - Si aucun catch ne correspond, std::terminate() est appelé (fin du programme)
-   - Préférer attraper par référence (const) pour éviter la copie
-
-2. Classes d'exception personnalisées
-   - Hériter de std::exception pour rester compatible avec l'infrastructure standard
-   - Surcharger: virtual const char* what() const throw();
-   - throw() après const indique que la méthode ne lance elle-même aucune exception
-   - Avantage: catchable via std::exception& tout en portant un message précis
-   - Définir plusieurs classes distinctes pour chaque cas d'erreur métier
-     (GradeTooHighException, GradeTooLowException)
+2. Exceptions personnalisées
+   - Hériter de std::exception, surcharger what() const throw()
+   - Catchable via std::exception& avec message spécifique
+   - Une classe par type d'erreur (GradeTooHighException, GradeTooLowException)
 
 3. Classes imbriquées (nested classes)
-   - Déclarer la classe dans le bloc public (ou private/protected) de la classe parent
-   - Accès depuis l'extérieur via l'opérateur de résolution de portée ::
-     (Bureaucrat::GradeTooHighException)
-   - Regroupe logiquement des types dont le sens dépend de la classe englobante
-   - Pas d'accès automatique aux membres de la classe parent (pas de this partagé)
+   - Classe déclarée dans le bloc public/private d'une autre classe
+   - Accès via :: (Bureaucrat::GradeTooHighException)
+   - Regroupe des types liés sémantiquement à la classe parent
 
-─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ EX01 ─ Form ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─
+4. Forward declaration
+   - Syntaxe: class NomClasse; (sans corps)
+   - Évite les dépendances circulaires entre headers
+   - Suffit pour déclarer des pointeurs/références, #include va dans le .cpp
 
-4. Déclaration anticipée (forward declaration)
-   - Syntaxe: class NomClasse; (une seule ligne, sans corps)
-   - Brise les dépendances circulaires entre headers
-     (Bureaucrat inclut Form, Form inclut Bureaucrat → boucle infinie)
-   - Suffit quand on n'utilise que des pointeurs ou des références dans le header
-   - Le header complet (#include "X.hpp") va dans le fichier .cpp correspondant
-
-5. Couplage faible entre classes
-   - Faire collaborer des objets de types différents sans que l'un ne connaisse
-     les détails internes de l'autre
-   - Passer les objets par référence entre méthodes (Form&, const Bureaucrat&)
-   - Déléguer la logique à la classe concernée plutôt que de tout centraliser
-     (signForm(Form& f) appelle f.beSigned(*this), la logique reste dans Form)
-   - Chaque classe garde sa responsabilité unique et son propre fichier
-
-─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ EX02 ─ AForm ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─
-  (classes abstraites et méthodes virtuelles pures → voir CPP4 dans Notes)
+5. Couplage faible
+   - Collaboration par référence sans connaître les détails internes
+   - Déléguer la logique à la classe concernée (responsabilité unique)
 
 6. Pattern Template Method
-   - Patron de conception: la classe de base définit le squelette d'un algorithme
-   - Les étapes spécifiques sont déléguées aux classes dérivées via une méthode virtuelle pure
-   - Centralise les vérifications communes (form signé ?, grade suffisant ?) dans execute()
-     de la classe de base AForm
-   - Les classes concrètes n'implémentent que executeAction(), sans re-vérifier les gardes
-   - Avantage: si la règle de vérification change, on ne modifie qu'un seul endroit
+   - Classe de base définit le squelette, dérivées implémentent les étapes
+   - Vérifications communes centralisées, action spécifique déléguée
+   - Modification d'une règle = un seul endroit à changer
 
-─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ EX03 ─ Intern ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─
+7. Dispatch table
+   - Tableau { nom, fonction } remplaçant if/else en cascade
+   - Extensible: ajouter un type = une ligne dans le tableau
+   - Structure: { std::string name; AForm* (*create)(const std::string&); }
 
-7. Dispatch table (tableau de structures nom → fonction)
-   - Remplace une chaîne de if/else par un tableau associant une clé (string) à une fonction
-   - Structure interne: { std::string name; AForm* (*create)(const std::string&); }
-   - On remplit un tableau statique de ces structures, puis on itère dessus pour trouver
-     la correspondance et appeler la fonction associée
-   - Extensible: ajouter un nouveau type ne nécessite qu'une ligne dans le tableau
-   - Évolution du principe des pointeurs sur méthodes (CPP1) appliqué à la création d'objets
-
-8. Fonctions membres statiques comme factories
-   - Méthode static qui crée et retourne une instance d'un type dérivé (AForm*)
-   - Déclaration: static AForm* makeX(const std::string& target);
-   - static permet de stocker un pointeur vers la fonction dans un tableau
-     (impossible avec des méthodes non-statiques qui nécessitent une instance)
-   - L'appelant est responsable de libérer la mémoire retournée (delete)
-   - Retourner NULL en cas d'erreur pour signaler l'échec sans lancer d'exception
-
-───────────────────────────────────────────────────────────────────────────────
-RÉSUMÉ CPP5
-───────────────────────────────────────────────────────────────────────────────
-- try/catch/throw pour gérer les erreurs sans codes de retour
-- Sous-classer std::exception + surcharger what() pour exceptions métier précises
-- Nested classes pour regrouper types logiquement liés à leur classe parent
-- Forward declaration pour briser dépendances circulaires entre headers
-- Couplage faible: déléguer la logique à la classe concernée, passer par référence
-- Pattern Template Method: vérifications centralisées dans la base, action dans les dérivées
-- Dispatch table: tableau nom→fonction, extensible sans toucher à la logique de sélection
-- Fonctions statiques factories: créer des instances polymorphes stockables dans un tableau
+8. Factory methods statiques
+   - Méthode static créant et retournant une instance polymorphe
+   - Stockable dans un tableau (impossible avec méthode non-static)
+   - Retourne NULL en cas d'échec, appelant responsable du delete
 
 
 ═══════════════════════════════════════════════════════════════════════════════
 CPP6 - CONVERSIONS DE TYPES (CASTS)
 ═══════════════════════════════════════════════════════════════════════════════
 
-NOTIONS CLÉS:
-- static_cast<>()           : conversion explicite entre types compatibles (compile-time)
-- Classes non-instantiables : constructeurs/destructeurs privés pour empêcher création d'objets
-- Détection de type literal : parsing de string pour identifier char, int, float, double
-- strtol/strtof/strtod      : conversion string → type numérique avec gestion d'erreurs
-- Valeurs spéciales         : nan, inf, -inf (IEEE 754)
-- std::isnan/std::isinf     : tester si un nombre est NaN ou infini
-- std::numeric_limits<>     : obtenir min/max d'un type (int, float, double)
-- std::setprecision()       : contrôler l'affichage des décimales
-
-─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ EX00 ─ ScalarConverter ─ ─ ─ ─ ─ ─ ─ ─
+─── EX00 : Conversion of scalar types ───
 
 1. static_cast<Type>()
-   - Conversion explicite entre types compatibles à la compilation
-   - Syntaxe: static_cast<int>(variable), static_cast<char>(42)
-   - Utilisé pour: promotions numériques (int→float), conversions explicites (float→int)
-   - Vérifié au compile-time, plus sûr que les C-casts (int)variable
-   - Ne fonctionne PAS pour les conversions entre pointeurs non-liés ou downcasts non sûrs
+   - Conversion explicite type-safe, vérifiée à la compilation
+   - Usage: promotions numériques (int→float), downcasts (float→int)
+   - Plus sûr que C-casts: (int)variable
 
-2. Classe non-instantiable (static-only class)
-   - Constructeur, destructeur, copy constructor et opérateur d'affectation en private
-   - Empêche la création d'instances: ScalarConverter obj; // Erreur de compilation
-   - Toutes les méthodes doivent être static (pas besoin d'instance pour les appeler)
-   - Syntaxe d'appel: ScalarConverter::convert("42");
-   - Utile pour regrouper des fonctions utilitaires sans état
+2. Classe non-instantiable
+   - Constructeurs et destructeur en private
+   - Méthodes static uniquement, appel via ClassName::method()
+   - Utile pour fonctions utilitaires sans état
 
-3. Détection de type d'un literal
-   - Parser la string pour identifier le format: 'c', 42, 42.0f, 42.0
-   - Règles de détection:
-     * char   : longueur 3, format 'X'
-     * int    : que des chiffres (+ optionnel -)
-     * float  : contient '.', se termine par 'f'
-     * double : contient '.', pas de 'f' final
-   - Gérer aussi les pseudo-literals: nan, nanf, +inf, -inf, +inff, -inff
+3. Détection de type literal
+   - Parser format: 'c' (char), 42 (int), 42.0f (float), 42.0 (double)
+   - Gérer pseudo-literals: nan, nanf, +inf, -inf, +inff, -inff
 
-4. Fonctions de conversion string → nombre (C standard library)
-   - strtol(str, NULL, 10) : string → long (base 10)
-   - strtof(str, NULL)     : string → float
-   - strtod(str, NULL)     : string → double
-   - Gestion d'erreurs via errno (ERANGE pour overflow)
-   - Plus robuste que atoi/atof (détection d'erreurs)
+4. Conversion string → nombre
+   - strtol/strtof/strtod: conversion robuste avec errno (ERANGE pour overflow)
+   - Plus fiable que atoi/atof (gestion d'erreurs)
 
 5. Valeurs spéciales IEEE 754
-   - NaN (Not a Number)    : résultat d'opération invalide (0/0, sqrt(-1))
-   - +inf / -inf (infini)  : résultat d'overflow ou division par zéro
-   - Literals C++: nan, nanf, +inf, -inf, +inff, -inff
-   - Ces valeurs se propagent dans les calculs
+   - NaN (Not a Number): opération invalide (0/0, sqrt(-1))
+   - ±inf: overflow ou division par zéro
+   - std::isnan(x), std::isinf(x) pour tester avant conversion
 
-6. Tests de valeurs spéciales
-   - std::isnan(x) : true si x est NaN
-   - std::isinf(x) : true si x est +inf ou -inf
-   - #include <cmath>
-   - Nécessaire avant de faire des conversions (int ne peut pas représenter NaN/inf)
+6. std::numeric_limits<Type>
+   - ::min(), ::max() pour obtenir limites d'un type
+   - Vérifier overflow avant conversion
 
-7. std::numeric_limits<Type>
-   - #include <limits>
-   - std::numeric_limits<int>::min() : plus petite valeur représentable
-   - std::numeric_limits<int>::max() : plus grande valeur représentable
-   - Permet de vérifier si une conversion est possible sans overflow
-   - Fonctionne pour tous les types numériques (int, float, double, char, etc.)
-
-8. Contrôle de l'affichage des nombres flottants
-   - std::fixed : forcer notation décimale (pas scientifique)
-   - std::setprecision(n) : nombre de chiffres après la virgule
+7. Affichage formaté
+   - std::fixed + std::setprecision(n): contrôler décimales
    - #include <iomanip>
-   - Exemple: std::cout << std::fixed << std::setprecision(1) << 42.0 << "f";
-   - Affiche: 42.0f (toujours 1 décimale)
 
-───────────────────────────────────────────────────────────────────────────────
-RÉSUMÉ CPP6
-───────────────────────────────────────────────────────────────────────────────
-- static_cast<>() : conversion explicite type-safe, vérifiée à la compilation
-- Classe non-instantiable : constructeurs privés + méthodes static uniquement
-- Détection de type literal : parser le format string ('c', 42, 42.0f, 42.0)
-- strtol/strtof/strtod : conversion robuste string→nombre avec gestion d'erreurs
-- Valeurs spéciales : nan, inf gérant cas limites IEEE 754
-- std::isnan/isinf : tester valeurs spéciales avant conversion
-- std::numeric_limits<> : obtenir limites min/max pour vérifier overflow
-- std::fixed + setprecision() : contrôler affichage formaté des nombres
+─── EX01 : Serialization ───
+
+8. reinterpret_cast<Type>()
+   - Conversion bas niveau sans vérification, réinterprétation brute des bits
+   - DANGEREUX: aucune conversion de valeur
+   - Usage: sérialisation, interfaçage C, manipulation d'adresses
+
+9. uintptr_t
+   - Type entier assez grand pour stocker une adresse (#include <stdint.h>)
+   - Conversion réversible: ptr → uintptr_t → ptr (même adresse)
+
+10. Sérialisation de pointeurs
+    - reinterpret_cast<uintptr_t>(ptr): Data* → uintptr_t
+    - reinterpret_cast<Data*>(raw): uintptr_t → Data*
+    - Vérifie ptr_original == ptr_désérialisé
+
+─── EX02 : Identify real type ───
+
+11. dynamic_cast<Type>()
+    - Conversion sûre dans hiérarchie polymorphe (nécessite virtual)
+    - Vérifie le type réel à l'exécution (RTTI)
+    
+    Avec pointeurs:
+    - Retourne NULL si échec, DOIT tester != NULL
+    
+    Avec références:
+    - Lance std::bad_cast si échec, DOIT utiliser try/catch
+
+12. Identification de type sans typeinfo
+    - Tester chaque classe avec dynamic_cast successivement
+    - Alternative à typeid() et <typeinfo>
+
+13. RTTI (Run-Time Type Information)
+    - Mécanisme C++ pour identifier le type réel à l'exécution
+    - Activé automatiquement si classe a ≥1 méthode virtuelle
+    - Utilisé par dynamic_cast
+    - Coût: mémoire (v-table) et performance (vérification runtime)
+- RTTI : mécanisme runtime pour connaître le type réel (nécessite virtual)

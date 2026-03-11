@@ -5,21 +5,21 @@
 
 int main()
 {
-	Bureaucrat b("Bob", 1);
+	Bureaucrat b("Bureaucrat", 1);
 
 	ShrubberyCreationForm scf("home");
 	b.signForm(scf);
 	b.executeForm(scf);
 
-	RobotomyRequestForm rrf("Bender");
+	RobotomyRequestForm rrf("Robot");
 	b.signForm(rrf);
 	b.executeForm(rrf);
 
-	PresidentialPardonForm ppf("Ford");
+	PresidentialPardonForm ppf("A");
 	b.signForm(ppf);
 	b.executeForm(ppf);
 
-	PresidentialPardonForm ppf2("Alice");
+	PresidentialPardonForm ppf2("B");
 	b.executeForm(ppf2);
 
 	Bureaucrat low("Low", 10);

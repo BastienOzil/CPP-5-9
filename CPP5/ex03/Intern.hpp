@@ -1,5 +1,4 @@
-#ifndef INTERN_HPP
-#define INTERN_HPP
+#pragma once
 
 #include "AForm.hpp"
 #include <string>
@@ -19,5 +18,3 @@ private:
 	static AForm	*makeRobotomy(const std::string &target);
 	static AForm	*makePardon(const std::string &target);
 };
-
-#endif

@@ -1,5 +1,4 @@
-#ifndef ROBOTOMYREQUESTFORM_HPP
-#define ROBOTOMYREQUESTFORM_HPP
+#pragma once
 
 #include "AForm.hpp"
 
@@ -18,5 +17,3 @@ public:
 protected:
 	void	executeAction() const;
 };
-
-#endif

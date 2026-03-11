@@ -1,5 +1,4 @@
-#ifndef AFORM_HPP
-#define AFORM_HPP
+#pragma once
 
 #include <iostream>
 #include <exception>
@@ -53,5 +52,3 @@ protected:
 };
 
 std::ostream &operator<<(std::ostream &os, const AForm &f);
-
-#endif

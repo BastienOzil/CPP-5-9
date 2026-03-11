@@ -1,5 +1,4 @@
-#ifndef FORM_HPP
-#define FORM_HPP
+#pragma once
 
 #include <iostream>
 #include <exception>
@@ -43,5 +42,3 @@ public:
 };
 
 std::ostream &operator<<(std::ostream &os, const Form &f);
-
-#endif

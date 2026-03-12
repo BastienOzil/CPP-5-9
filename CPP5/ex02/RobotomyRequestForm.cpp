@@ -1,15 +1,33 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   RobotomyRequestForm.cpp                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bozil <bozil@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/12 10:55:19 by bozil             #+#    #+#             */
+/*   Updated: 2026/03/12 10:55:21 by bozil            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "RobotomyRequestForm.hpp"
 #include <cstdlib>
 #include <ctime>
 
-RobotomyRequestForm::RobotomyRequestForm()
-	: AForm("RobotomyRequestForm", 72, 45), _target("default") {}
+RobotomyRequestForm::RobotomyRequestForm() : AForm("RobotomyRequestForm", 72,
+	45), _target("default")
+{
+}
 
-RobotomyRequestForm::RobotomyRequestForm(const std::string &target)
-	: AForm("RobotomyRequestForm", 72, 45), _target(target) {}
+RobotomyRequestForm::RobotomyRequestForm(const std::string &target) : AForm("RobotomyRequestForm",
+	72, 45), _target(target)
+{
+}
 
-RobotomyRequestForm::RobotomyRequestForm(const RobotomyRequestForm &src)
-	: AForm(src), _target(src._target) {}
+RobotomyRequestForm::RobotomyRequestForm(const RobotomyRequestForm &src) : AForm(src),
+	_target(src._target)
+{
+}
 
 RobotomyRequestForm &RobotomyRequestForm::operator=(const RobotomyRequestForm &src)
 {
@@ -18,10 +36,12 @@ RobotomyRequestForm &RobotomyRequestForm::operator=(const RobotomyRequestForm &s
 		AForm::operator=(src);
 		_target = src._target;
 	}
-	return *this;
+	return (*this);
 }
 
-RobotomyRequestForm::~RobotomyRequestForm() {}
+RobotomyRequestForm::~RobotomyRequestForm()
+{
+}
 
 void RobotomyRequestForm::executeAction() const
 {

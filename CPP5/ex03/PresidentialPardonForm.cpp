@@ -1,13 +1,31 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   PresidentialPardonForm.cpp                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bozil <bozil@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/12 10:56:09 by bozil             #+#    #+#             */
+/*   Updated: 2026/03/12 10:56:10 by bozil            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "PresidentialPardonForm.hpp"
 
-PresidentialPardonForm::PresidentialPardonForm()
-	: AForm("PresidentialPardonForm", 25, 5), _target("default") {}
+PresidentialPardonForm::PresidentialPardonForm() : AForm("PresidentialPardonForm",
+	25, 5), _target("default")
+{
+}
 
-PresidentialPardonForm::PresidentialPardonForm(const std::string &target)
-	: AForm("PresidentialPardonForm", 25, 5), _target(target) {}
+PresidentialPardonForm::PresidentialPardonForm(const std::string &target) : AForm("PresidentialPardonForm",
+	25, 5), _target(target)
+{
+}
 
-PresidentialPardonForm::PresidentialPardonForm(const PresidentialPardonForm &src)
-	: AForm(src), _target(src._target) {}
+PresidentialPardonForm::PresidentialPardonForm(const PresidentialPardonForm &src) : AForm(src),
+	_target(src._target)
+{
+}
 
 PresidentialPardonForm &PresidentialPardonForm::operator=(const PresidentialPardonForm &src)
 {
@@ -16,10 +34,12 @@ PresidentialPardonForm &PresidentialPardonForm::operator=(const PresidentialPard
 		AForm::operator=(src);
 		_target = src._target;
 	}
-	return *this;
+	return (*this);
 }
 
-PresidentialPardonForm::~PresidentialPardonForm() {}
+PresidentialPardonForm::~PresidentialPardonForm()
+{
+}
 
 void PresidentialPardonForm::executeAction() const
 {

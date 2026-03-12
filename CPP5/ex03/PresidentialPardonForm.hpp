@@ -1,19 +1,31 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   PresidentialPardonForm.hpp                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bozil <bozil@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/12 10:56:13 by bozil             #+#    #+#             */
+/*   Updated: 2026/03/12 10:56:14 by bozil            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #pragma once
 
 #include "AForm.hpp"
 
 class PresidentialPardonForm : public AForm
 {
-private:
+  private:
 	std::string _target;
 
-public:
+  public:
 	PresidentialPardonForm();
 	PresidentialPardonForm(const std::string &target);
 	PresidentialPardonForm(const PresidentialPardonForm &src);
 	PresidentialPardonForm &operator=(const PresidentialPardonForm &src);
 	~PresidentialPardonForm();
 
-protected:
-	void	executeAction() const;
+  protected:
+	void executeAction() const;
 };

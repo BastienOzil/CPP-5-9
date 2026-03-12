@@ -1,14 +1,32 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ShrubberyCreationForm.cpp                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: bozil <bozil@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/03/12 10:56:25 by bozil             #+#    #+#             */
+/*   Updated: 2026/03/12 10:56:27 by bozil            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ShrubberyCreationForm.hpp"
 #include <fstream>
 
-ShrubberyCreationForm::ShrubberyCreationForm()
-	: AForm("ShrubberyCreationForm", 145, 137), _target("default") {}
+ShrubberyCreationForm::ShrubberyCreationForm() : AForm("ShrubberyCreationForm",
+	145, 137), _target("default")
+{
+}
 
-ShrubberyCreationForm::ShrubberyCreationForm(const std::string &target)
-	: AForm("ShrubberyCreationForm", 145, 137), _target(target) {}
+ShrubberyCreationForm::ShrubberyCreationForm(const std::string &target) : AForm("ShrubberyCreationForm",
+	145, 137), _target(target)
+{
+}
 
-ShrubberyCreationForm::ShrubberyCreationForm(const ShrubberyCreationForm &src)
-	: AForm(src), _target(src._target) {}
+ShrubberyCreationForm::ShrubberyCreationForm(const ShrubberyCreationForm &src) : AForm(src),
+	_target(src._target)
+{
+}
 
 ShrubberyCreationForm &ShrubberyCreationForm::operator=(const ShrubberyCreationForm &src)
 {
@@ -17,10 +35,12 @@ ShrubberyCreationForm &ShrubberyCreationForm::operator=(const ShrubberyCreationF
 		AForm::operator=(src);
 		_target = src._target;
 	}
-	return *this;
+	return (*this);
 }
 
-ShrubberyCreationForm::~ShrubberyCreationForm() {}
+ShrubberyCreationForm::~ShrubberyCreationForm()
+{
+}
 
 void ShrubberyCreationForm::executeAction() const
 {
@@ -28,7 +48,7 @@ void ShrubberyCreationForm::executeAction() const
 	if (!file.is_open())
 	{
 		std::cerr << "Error: cannot open file " << _target << "_shrubbery" << std::endl;
-		return;
+		return ;
 	}
 	file << "        *        " << std::endl;
 	file << "       ***       " << std::endl;

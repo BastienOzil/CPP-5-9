@@ -119,3 +119,86 @@ CPP6 - CONVERSIONS DE TYPES (CASTS)
     - Utilisé par dynamic_cast
     - Coût: mémoire (v-table) et performance (vérification runtime)
 - RTTI : mécanisme runtime pour connaître le type réel (nécessite virtual)
+
+
+═══════════════════════════════════════════════════════════════════════════════
+CPP7 - TEMPLATES ET PROGRAMMATION GÉNÉRIQUE
+═══════════════════════════════════════════════════════════════════════════════
+
+─── EX00 : Function templates ───
+
+1. Templates de fonctions
+   - Syntaxe: template <typename T> Type fonction(T arg)
+   - Compilation générant du code pour chaque type utilisé
+   - Paramètre de type: T remplacé par le type réel à la compilation
+   - Instanciation implicite: swap(a, b) → compilateur déduit T
+
+2. Surcharge implicite par le compilateur
+   - Un template = un modèle pour générer plusieurs fonctions
+   - swap<int>(), swap<double>(), swap<std::string>() générées automatiquement
+   - Chaque instanciation est une fonction entièrement indépendante
+
+3. Non-type template parameters (optionnel)
+   - Paramètres constantes en temps de compilation: template <typename T, int N>
+   - Utile pour les tableaux fixes: Array<int, 10> crée 10 ints
+
+4. Template specialization
+   - Surcharge: template <> void swap<std::string>(...)
+   - Spécialiser pour un type spécifique si besoin
+
+─── EX01 : Templates avancés et pointeurs de fonctions ───
+
+5. Templates multiples paramètres
+   - template <typename T, typename Function>
+   - Permet flexibilité: iter(tab, len, func) applique func à chaque élément
+
+6. Pointeurs de fonctions comme paramètres template
+   - Function ft: paramètre template acceptant fonction ou foncteur
+   - Appel: ft(add[i]) invoque le callback sur chaque élément
+   - Même fonction template avec signatures différentes
+
+7. Overloading de templates
+   - Variantes pour const et non-const: iter(T*) et iter(const T*)
+   - Compilateur choisit la meilleure surcharge selon le contexte
+   - Permet traiter const T* sans modification d'éléments
+
+8. Template d'exception
+   - std::out_of_range pour bounds checking
+   - throw std::out_of_range("message") lance exception standard
+
+─── EX02 : Template de classe ───
+
+9. Templates de classes
+   - Syntaxe: template <typename T> class Array
+   - T remplace type d'élément, généré pour chaque utilisation
+   - Array<int> et Array<double> sont des classes entièrement différentes
+
+10. Constructeurs en templates
+    - Constructeur par défaut: Array() initialise à vide
+    - Constructeur avec taille: Array(unsigned int n) alloue n éléments
+    - Initialisation des éléments: new T[n]() appelle constructeur de T
+
+11. Copy constructor et operator= en template
+    - Deep copy obligatoire: copier chaque élément du tableau
+    - operator=: libérer l'ancienne mémoire, allouer nouvelle, copier
+    - Vérification this != &other pour éviter auto-destruction
+
+12. Opérateur[] surchargé en template
+    - Deux versions: T& operator[]() et const T& operator[]() const
+    - Bounds checking: throw std::out_of_range si idx >= size
+    - Retour par référence pour permettre modification
+
+13. Destructeur et gestion mémoire
+    - delete[] _data libère tableau alloué avec new[]
+    - Essentiel: ne pas fuir de mémoire, appel automatique
+    - Valide même si _data == nullptr
+
+14. Allocation de tableau générique
+    - new T[n](): alloue n éléments de type T
+    - Appelle constructeur par défaut de T pour chaque élément
+    - () initialise à zéro si T est primitif (int(), double() = 0)
+
+15. Instanciation explicite vs implicite
+    - Implicite: Array<int> arr(5); → compilateur génère Array<int>
+    - Code généré séparément pour chaque type instancié
+    - Augmente taille du binaire vs code générique en runtime

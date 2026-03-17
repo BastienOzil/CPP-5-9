@@ -1,0 +1,131 @@
+#pragma once : est une directive du préprocesseur utilisée pour empêcher 
+que les fichiers en-tête soient inclus plusieurs fois. 
+La directive #pragma once , présente dans un fichier, garantit que 
+le fichier ne sera pas inclus plusieurs fois dans le projet en cours.
+Utilisé dans : tous les headers du projet.
+
+--CPP5--
+
+Exception : est un mécanisme qui signale une erreur à l'exécution avec throw.
+Le bloc try encadre le code risqué et catch récupère l'erreur.
+L'exception remonte la pile jusqu'au premier gestionnaire compatible.
+Utilisé dans : CPP5/ex00, ex01, ex02, ex03.
+
+Exception personnalisée : est une classe d'erreur héritée de std::exception.
+Elle redéfinit what() pour fournir un message précis.
+Ce type d'exception permet de distinguer clairement les causes d'échec.
+Utilisé dans : CPP5/ex00, ex01, ex02, ex03.
+
+Classe imbriquée : est une classe déclarée dans une autre classe.
+Elle s'utilise avec l'opérateur de résolution de portée (::).
+Cela regroupe des types fortement liés à la logique de la classe parente.
+Utilisé dans : CPP5/ex00 (exceptions de Bureaucrat).
+
+Forward declaration : est une déclaration anticipée d'une classe sans son corps.
+Elle réduit les dépendances et évite les inclusions circulaires entre headers.
+Elle suffit pour déclarer des pointeurs et des références.
+Utilisé dans : CPP5/ex01, ex02, ex03.
+
+Template Method : est un patron où la classe de base définit un algorithme.
+Les classes dérivées implémentent seulement les étapes spécifiques.
+Cela centralise les règles communes et simplifie la maintenance.
+Utilisé dans : CPP5/ex02, ex03 (AForm et formulaires dérivés).
+
+Dispatch table : est un tableau associant un nom à une fonction de création.
+Elle remplace des if/else répétés par une sélection de fonction.
+Ajouter un nouveau type revient à ajouter une seule entrée.
+Utilisé dans : CPP5/ex03 (Intern::makeForm).
+
+Factory method statique : est une méthode static qui construit un objet.
+Elle retourne souvent un pointeur polymorphe vers la classe de base.
+Cette approche uniformise la création d'objets selon un type demandé.
+Utilisé dans : CPP5/ex03 (création des formulaires).
+
+
+--CPP6--
+
+static_cast : est une conversion explicite vérifiée à la compilation.
+Il sert aux conversions sûres entre types compatibles.
+Il est plus lisible et plus sûr qu'un cast en style C.
+Utilisé dans : CPP6/ex00.
+
+reinterpret_cast : est une conversion bas niveau d'une représentation binaire.
+Il réinterprète l'adresse ou les bits sans vérifier la validité sémantique.
+Son usage doit rester limité aux cas techniques comme la sérialisation.
+Utilisé dans : CPP6/ex01.
+
+dynamic_cast : est une conversion sûre dans une hiérarchie polymorphe.
+Avec un pointeur, il retourne NULL en cas d'échec de conversion.
+Avec une référence, il lance une exception std::bad_cast.
+Utilisé dans : CPP6/ex02.
+
+RTTI : est le mécanisme qui fournit le type réel à l'exécution.
+Il fonctionne avec les classes possédant au moins une méthode virtuelle.
+dynamic_cast s'appuie sur RTTI pour valider les conversions.
+Utilisé dans : CPP6/ex02.
+
+Classe non-instantiable : est une classe qu'on ne peut pas construire.
+Ses constructeurs sont privés et ses méthodes sont souvent static.
+Elle sert à regrouper des utilitaires sans état d'objet.
+Utilisé dans : CPP6/ex00, ex01.
+
+Sérialisation de pointeur : est la conversion Data* vers uintptr_t.
+La désérialisation inverse convertit uintptr_t vers Data*.
+L'objectif est de préserver la même adresse de mémoire.
+Utilisé dans : CPP6/ex01.
+
+std::numeric_limits : est un utilitaire qui donne les bornes d'un type.
+Il permet de vérifier min() et max() avant une conversion.
+Cela évite les dépassements lors du changement de type.
+Utilisé dans : CPP6/ex00.
+
+static_cast : est une conversion explicite vérifiée à la compilation.
+Il convertit une valeur vers un type compatible de façon contrôlée.
+Il ne retire pas les qualificateurs const ou volatile.
+Utilisé dans : CPP6/ex00.
+
+reinterpret_cast : est une conversion bas niveau d'adresse ou de bits.
+Il conserve le même modèle binaire mais change l'interprétation du type.
+Cette conversion est puissante mais risquée sans garanties de compatibilité.
+Utilisé dans : CPP6/ex01.
+
+dynamic_cast : est une conversion sûre dans une hiérarchie polymorphe.
+Avec un pointeur, l'échec retourne NULL et doit être vérifié.
+Avec une référence, l'échec lance l'exception std::bad_cast.
+Utilisé dans : CPP6/ex02.
+
+--CPP7--
+Template de fonction : est une fonction générique paramétrée par un type T.
+Le compilateur génère une version pour chaque type réellement utilisé.
+Cette approche évite de dupliquer la même logique.
+Utilisé dans : CPP7/ex00, ex01.
+
+Instanciation implicite : est la déduction automatique du type template.
+Le compilateur détermine T à partir des arguments passés à l'appel.
+La bonne version de la fonction est générée sans annotation supplémentaire.
+Utilisé dans : CPP7/ex00, ex01, ex02.
+
+Surcharge template const/non-const : adapte le comportement au niveau de const.
+Elle permet de traiter des tableaux modifiables et non modifiables.
+Le compilateur choisit automatiquement la surcharge la plus adaptée.
+Utilisé dans : CPP7/ex01, ex02.
+
+Template de classe : est une classe générique comme Array<T>.
+Chaque type instancié produit une classe distincte à la compilation.
+On obtient une structure réutilisable pour plusieurs types.
+Utilisé dans : CPP7/ex02.
+
+Deep copy : est une copie qui duplique les données allouées dynamiquement.
+Chaque objet possède sa propre mémoire après copie.
+Elle évite les doubles libérations et les corruptions mémoire.
+Utilisé dans : CPP7/ex02.
+
+Surcharge de operator[] : permet l'accès aux éléments d'une classe conteneur.
+Elle retourne une référence pour lire ou modifier un élément.
+Un contrôle des bornes peut lancer std::out_of_range.
+Utilisé dans : CPP7/ex02.
+
+Allocation générique new T[n]() : crée un tableau de type template T.
+Le constructeur par défaut de T est appelé pour chaque élément.
+Les types primitifs sont initialisés à zéro avec les parenthèses.
+Utilisé dans : CPP7/ex02.

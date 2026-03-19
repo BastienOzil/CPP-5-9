@@ -103,11 +103,6 @@ Chaque type instancié produit une classe distincte à la compilation.
 On obtient une structure réutilisable pour plusieurs types.
 Utilisé dans : CPP7/ex02.
 
-Deep copy : est une copie qui duplique les données allouées dynamiquement.
-Chaque objet possède sa propre mémoire après copie.
-Elle évite les doubles libérations et les corruptions mémoire.
-Utilisé dans : CPP7/ex02.
-
 Surcharge de operator[] : permet l'accès aux éléments d'une classe conteneur.
 Elle retourne une référence pour lire ou modifier un élément.
 Un contrôle des bornes peut lancer std::out_of_range.

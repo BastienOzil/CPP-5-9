@@ -1,9 +1,13 @@
 #pragma once
 
-template <typename T> typename T::iterator easyfind(T& container, int value)
+#include <algorithm>
+#include <stdexcept>
+
+template <typename T> typename T::iterator easyfind(T &container, int value)
 {
-    typename T::integrer it = std::find(container.begin())
-    if(it == container.end())
-        throw std::runtime_error("Value not found");
-    return it;
+	typename T::iterator it = std::find(container.begin(), container.end(),
+			value);
+	if (it == container.end())
+		throw std::runtime_error("Value not found");
+	return (it);
 }

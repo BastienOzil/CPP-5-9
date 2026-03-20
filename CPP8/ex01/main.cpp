@@ -1,5 +1,8 @@
 #include "Span.hpp"
+#include <cstdlib>
+#include <cerrno>
 
+/*
 int	main(void)
 {
 	Span	sp = Span(5);
@@ -12,19 +15,37 @@ int	main(void)
 
 	std::cout << sp.shortestSpan() << std::endl;
 	std::cout << sp.longestSpan() << std::endl;
-    
+
 	return (0);
-}
-/*
-int	main(void)
+}*/
+
+static int	parseInt(const char *value)
 {
+	char *end;
+	long number;
+
+	errno = 0;
+	number = std::strtol(value, &end, 10);
+	if (errno != 0 || *end != '\0' || number < INT_MIN || number > INT_MAX)
+		throw std::runtime_error("Invalid integer argument");
+	return (static_cast<int>(number));
+}
+
+int	main(int argc, char **argv)
+{
+	if (argc < 3)
+	{
+		std::cerr << "Usage: " << argv[0] << " <int1> <int2> [int3 ...]" << std::endl;
+		return (1);
+	}
+
 	try
 	{
-		Span big(10000);
-		for (int i = 0; i < 10000; ++i)
-			big.addNumber(i * 2); // 0, 2, 4, ..., 19998
-		std::cout << "Shortest: " << big.shortestSpan() << std::endl; // 2
-		std::cout << "Longest : " << big.longestSpan() << std::endl;  // 19998
+		Span span(argc - 1);
+		for (int i = 1; i < argc; ++i)
+			span.addNumber(parseInt(argv[i]));
+		std::cout << "Shortest: " << span.shortestSpan() << std::endl;
+		std::cout << "Longest : " << span.longestSpan() << std::endl;
 	}
 	catch (const std::exception &e)
 	{
@@ -32,4 +53,4 @@ int	main(void)
 	}
 	return (0);
 }
-*/
+

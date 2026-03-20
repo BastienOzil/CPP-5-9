@@ -6,19 +6,21 @@
 int	main(void)
 {
     std::vector<int> numbers;
-    numbers.push_back(10);
-    numbers.push_back(20);
-    numbers.push_back(30);
+    numbers.push_back(1);
+    numbers.push_back(2);
+    numbers.push_back(3);
+    numbers.push_back(4);
 
     std::list<int> values;
     values.push_back(1);
     values.push_back(2);
     values.push_back(3);
+    values.push_back(4);
 
     try
     {
-        std::vector<int>::iterator it = easyfind(numbers, 20);
-        std::cout << "Vectore get: " << *it << std::endl;
+        std::vector<int>::iterator it = easyfind(numbers, 4);
+        std::cout << "Find: " << *it << " on vector" << std::endl;
     }
     catch (const std::exception& e)
     {
@@ -28,7 +30,8 @@ int	main(void)
     try
     {
         std::list<int>::iterator it = easyfind(values, 2);
-        std::cout << "List get: " << *it << std::endl;
+        std::cout << "Find: " << *it << " on list" <<std::endl;
+        
     }
     catch (const std::exception& e)
     {

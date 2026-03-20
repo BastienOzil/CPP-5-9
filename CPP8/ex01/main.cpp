@@ -12,27 +12,24 @@ int	main(void)
 
 	std::cout << sp.shortestSpan() << std::endl;
 	std::cout << sp.longestSpan() << std::endl;
-
+    
 	return (0);
 }
 /*
-int	main(int argc, char **argv)
+int	main(void)
 {
-	Span	sp = Span(argc);
-	int		i;
-	int		y;
-
-	if (argc < 2)
-		return (0);
-	i = 1;
-	y = 2;
-	while (y <= argc)
+	try
 	{
-		sp.addNumber(*argv[i]);
-		i++;
-		y++;
+		Span big(10000);
+		for (int i = 0; i < 10000; ++i)
+			big.addNumber(i * 2); // 0, 2, 4, ..., 19998
+		std::cout << "Shortest: " << big.shortestSpan() << std::endl; // 2
+		std::cout << "Longest : " << big.longestSpan() << std::endl;  // 19998
 	}
-	std::cout << sp.shortestSpan() << std::endl;
-	std::cout << sp.longestSpan() << std::endl;
+	catch (const std::exception &e)
+	{
+		std::cerr << "Error: " << e.what() << std::endl;
+	}
 	return (0);
-}*/
+}
+*/

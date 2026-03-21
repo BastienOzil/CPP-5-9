@@ -112,3 +112,46 @@ Allocation générique new T[n]() : crée un tableau de type template T.
 Le constructeur par défaut de T est appelé pour chaque élément.
 Les types primitifs sont initialisés à zéro avec les parenthèses.
 Utilisé dans : CPP7/ex02.
+
+
+--CPP8--
+
+Algorithme STL std::find : recherche une valeur dans un intervalle d'itérateurs.
+Il compare chaque élément entre begin() et end().
+Si la valeur n'est pas trouvée, il retourne l'itérateur end().
+Utilisé dans : CPP8/ex00 (easyfind).
+
+Type dépendant template (typename T::iterator) : indique un type membre d'un paramètre template.
+Le mot-clé typename est obligatoire pour lever l'ambiguite lors de la compilation.
+Cela permet d'ecrire une fonction generique qui retourne l'itérateur du conteneur recu.
+Utilisé dans : CPP8/ex00 (easyfind).
+
+Exception std::runtime_error : signale une erreur d'execution avec un message.
+Elle est adaptee aux erreurs logiques detectees au runtime.
+Elle est utilisee quand une valeur est absente ou quand le conteneur est dans un etat invalide.
+Utilisé dans : CPP8/ex00, ex01.
+
+Conteneur STL std::vector : stocke des elements contigus en memoire.
+Il offre un acces rapide et des operations push_back efficaces en moyenne.
+Il est adapte pour accumuler des entiers puis appliquer des algorithmes STL.
+Utilisé dans : CPP8/ex01 (Span).
+
+Calcul du plus petit ecart (shortest span) : consiste a trier puis comparer les voisins.
+Apres tri, l'ecart minimum global se trouve forcement entre deux elements adjacents.
+Cette methode evite une comparaison quadratique de toutes les paires.
+Utilisé dans : CPP8/ex01 (Span::shortestSpan).
+
+Algorithmes std::min_element et std::max_element : trouvent minimum et maximum d'une plage.
+Le plus grand ecart est la difference max - min.
+Cette approche donne longest span simplement et efficacement.
+Utilisé dans : CPP8/ex01 (Span::longestSpan).
+
+Adaptateur de conteneur std::stack : fournit une interface LIFO au-dessus d'un conteneur sous-jacent.
+Il expose push/pop/top/size mais pas d'iteration directe.
+Le conteneur interne est accessible dans une classe derivee via le membre protege c.
+Utilisé dans : CPP8/ex02 (MutantStack).
+
+Iterabilite par heritage (MutantStack) : derive de std::stack pour exposer des iterateurs.
+On definit les types iterator/const_iterator/reverse_iterator depuis container_type.
+Les methodes begin/end/rbegin/rend redirigent vers le conteneur sous-jacent c.
+Utilisé dans : CPP8/ex02.

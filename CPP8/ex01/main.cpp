@@ -1,6 +1,7 @@
 #include "Span.hpp"
-#include <cstdlib>
 #include <cerrno>
+#include <cstdlib>
+#include <vector>
 
 /*
 int	main(void)
@@ -35,15 +36,19 @@ int	main(int argc, char **argv)
 {
 	if (argc < 3)
 	{
-		std::cerr << "Usage: " << argv[0] << " <int1> <int2> [int3 ...]" << std::endl;
+		std::cerr << "Usage: " << argv[0] << " <int1> <int2> <int3> ...]" << std::endl;
 		return (1);
 	}
 
 	try
 	{
-		Span span(argc - 1);
+		std::vector<int> values;
+		values.reserve(argc - 1);
 		for (int i = 1; i < argc; ++i)
-			span.addNumber(parseInt(argv[i]));
+			values.push_back(parseInt(argv[i]));
+
+		Span span(argc - 1);
+		span.addNumbers(values.begin(), values.end());
 		std::cout << "Shortest: " << span.shortestSpan() << std::endl;
 		std::cout << "Longest : " << span.longestSpan() << std::endl;
 	}

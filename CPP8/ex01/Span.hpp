@@ -1,10 +1,10 @@
 #pragma once
 
 #include <algorithm>
-#include <iostream>
-#include <vector>
-#include <limits>
 #include <climits>
+#include <iostream>
+#include <limits>
+#include <vector>
 
 class Span
 {

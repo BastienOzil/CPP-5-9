@@ -16,7 +16,7 @@ bool	isDigits(const std::string &text)
 	}
 	return (true);
 }
-}
+} // namespace
 
 BitcoinExchange::BitcoinExchange()
 {

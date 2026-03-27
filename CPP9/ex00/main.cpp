@@ -2,27 +2,22 @@
 
 int	main(int argc, char **argv)
 {
-	std::ifstream file(argv[1]);
-	if (argc == 2)
+	if (argc != 2)
 	{
-		if (file.is_open())
-		{
-			std::cout << "File found" << std::endl;
-
-			BitcoinExchange btc;
-			return (1);
-		}
-		else
-		{
-			std::cerr << "Error: Is not a valid file name" << std::endl;
-			return (0);
-		}
-	}
-	else
-	{
-		std::cout << "Usage: ./btc <file name>" << std::endl;
+		std::cerr << "Error: could not open file." << std::endl;
+		return (1);
 	}
 
-	file.close();
+	try
+	{
+		BitcoinExchange btc;
+		btc.processInputFile(argv[1]);
+	}
+	catch (const std::exception &e)
+	{
+		std::cerr << e.what() << std::endl;
+		return (1);
+	}
+
 	return (0);
 }

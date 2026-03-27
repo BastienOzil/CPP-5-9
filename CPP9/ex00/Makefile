@@ -1,3 +1,5 @@
+.SILENT:
+
 NAME = btc
 
 C++ = c++

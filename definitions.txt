@@ -155,3 +155,37 @@ Iterabilite par heritage (MutantStack) : derive de std::stack pour exposer des i
 On definit les types iterator/const_iterator/reverse_iterator depuis container_type.
 Les methodes begin/end/rbegin/rend redirigent vers le conteneur sous-jacent c.
 Utilisé dans : CPP8/ex02.
+
+
+--CPP9--
+
+Conteneur associatif STL std::map : stocke des paires cle/valeur triees par cle.
+Il garantit l'ordre des cles et permet des recherches efficaces.
+Il est adapte pour lier une date (cle) a un taux de change (valeur).
+Utilisé dans : CPP9/ex00 (BitcoinExchange).
+
+Recherche de date la plus proche avec lower_bound : retourne le premier element >= cle.
+Si la date exacte n'existe pas, on recule d'un iterateur pour recuperer la date precedente.
+Cette technique permet d'appliquer le dernier taux connu avant une date donnee.
+Utilisé dans : CPP9/ex00 (BitcoinExchange::findRateForDate).
+
+Tokenisation avec std::istringstream : lit une chaine comme un flux d'entree.
+Elle permet d'extraire les tokens separes par espaces avec l'operateur >>.
+C'est pratique pour evaluer une expression RPN pas a pas.
+Utilisé dans : CPP9/ex01 (RPN::evaluate).
+
+Machine a pile pour la notation polonaise inverse (RPN) : applique les operateurs sur les 2 derniers operandes.
+Chaque nombre est empile, puis un operateur depile deux valeurs et empile le resultat.
+Le calcul est valide si une seule valeur reste en fin d'evaluation.
+Utilisé dans : CPP9/ex01.
+
+Validation numerique stricte avec std::strtod + endPtr : verifie qu'une chaine represente exactement un nombre.
+La conversion est valide seulement si toute la chaine est consommee (pas de caractere residuel).
+Cela evite d'accepter des entrees partielles ou mal formees.
+Utilisé dans : CPP9/ex00 (BitcoinExchange::parseValue).
+
+Algorithme STL std::merge : fusionne deux plages deja triees en une plage triee.
+Combine avec une division recursive du tableau, il permet une approche type merge sort.
+Cette methode illustre une strategie divide-and-conquer en tri.
+Utilisé dans : CPP9/ex02 (PmergeMe::sort).
+

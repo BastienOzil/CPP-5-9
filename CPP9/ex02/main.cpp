@@ -13,12 +13,12 @@ int	main(int argc, char **argv)
 	for (int i = 1; i < argc; ++i)
 	{
 		numbers.push_back(atoi(argv[i]));
+		
 	}
-
 	PmergeMe sorter;
 	sorter.sort(numbers);
 
-	std::cout << "Sorted numbers: ";
+	std::cout << "After: ";
 	for (std::vector<int>::iterator it = numbers.begin(); it != numbers.end(); ++it)
 	{
 		std::cout << *it << " ";

@@ -167,7 +167,7 @@ Utilisé dans : CPP9/ex00 (BitcoinExchange).
 Recherche de date la plus proche avec lower_bound : retourne le premier element >= cle.
 Si la date exacte n'existe pas, on recule d'un iterateur pour recuperer la date precedente.
 Cette technique permet d'appliquer le dernier taux connu avant une date donnee.
-Utilisé dans : CPP9/ex00/ex02 (BitcoinExchange::findRateForDate).
+Utilisé dans : CPP9/ex00, ex02 (BitcoinExchange::findRateForDate).
 
 Validation numerique stricte avec std::strtod + endPtr : verifie qu'une chaine represente exactement un nombre.
 La conversion est valide seulement si toute la chaine est consommee (pas de caractere residuel).

@@ -16,7 +16,7 @@ PmergeMe &PmergeMe::operator=(const PmergeMe &other)
 PmergeMe::~PmergeMe(){}
 
 
-void PmergeMe::mergeVector(std::vector<int> &vec)
+void PmergeMe::mergeVector(std::vector<int> &vec) 
 {
 	if (vec.size() <= 1)
 		return;

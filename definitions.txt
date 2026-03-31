@@ -167,7 +167,12 @@ Utilisé dans : CPP9/ex00 (BitcoinExchange).
 Recherche de date la plus proche avec lower_bound : retourne le premier element >= cle.
 Si la date exacte n'existe pas, on recule d'un iterateur pour recuperer la date precedente.
 Cette technique permet d'appliquer le dernier taux connu avant une date donnee.
-Utilisé dans : CPP9/ex00 (BitcoinExchange::findRateForDate).
+Utilisé dans : CPP9/ex00/ex02 (BitcoinExchange::findRateForDate).
+
+Validation numerique stricte avec std::strtod + endPtr : verifie qu'une chaine represente exactement un nombre.
+La conversion est valide seulement si toute la chaine est consommee (pas de caractere residuel).
+Cela evite d'accepter des entrees partielles ou mal formees.
+Utilisé dans : CPP9/ex00 (BitcoinExchange::parseValue).
 
 Tokenisation avec std::istringstream : lit une chaine comme un flux d'entree.
 Elle permet d'extraire les tokens separes par espaces avec l'operateur >>.
@@ -179,13 +184,32 @@ Chaque nombre est empile, puis un operateur depile deux valeurs et empile le res
 Le calcul est valide si une seule valeur reste en fin d'evaluation.
 Utilisé dans : CPP9/ex01.
 
-Validation numerique stricte avec std::strtod + endPtr : verifie qu'une chaine represente exactement un nombre.
-La conversion est valide seulement si toute la chaine est consommee (pas de caractere residuel).
-Cela evite d'accepter des entrees partielles ou mal formees.
-Utilisé dans : CPP9/ex00 (BitcoinExchange::parseValue).
-
 Algorithme STL std::merge : fusionne deux plages deja triees en une plage triee.
 Combine avec une division recursive du tableau, il permet une approche type merge sort.
 Cette methode illustre une strategie divide-and-conquer en tri.
 Utilisé dans : CPP9/ex02 (PmergeMe::sort).
 
+Ford-Johnson Algorithm (Merge-Insertion Sort) : classe les elements en paires, les trie, puis trie les gagnants.
+Les perdants sont ensuite inseres en ordre croissant dans la sequence triee via recherche binaire.
+Cet algorithme minimise le nombre de comparaisons par rapport au merge sort classique.
+Utilisé dans : CPP9/ex02.
+
+Conteneur STL std::deque : stocke des elements avec acces rapide aux deux extremites.
+Contrairement au vector, il permet des insertions/suppressions efficaces au debut et a la fin.
+Il est generalement plus gourmand en memoire mais offre une meilleure localite en debut/fin.
+Utilisé dans : CPP9/ex02.
+
+Chronomètrage avec std::chrono : mesure le temps d'execution precisement.
+std::chrono::high_resolution_clock::now() capture l'instant actuel.
+La difference entre deux instants donne la duree en unites personnalisables (microsecondes, nanosecondes, etc).
+Utilisé dans : CPP9/ex02 (mesure du temps de tri pour chaque conteneur).
+
+Paire de donnees avec std::pair : groupe deux elements de types potentiellement differents.
+Elle offre un moyen simple de manipuler et trier des couples (p.ex. paires et leurs gagnants).
+Les paires peuvent etre creees avec std::make_pair ou l'accès par .first et .second.
+Utilisé dans : CPP9/ex02 (groupement des paires d'elements avant tri).
+
+Validation de nombre positif stricte : verifie qu'une chaine represente un entier positif.
+Elle detecte les nombres negatifs, les caracteres non numeriques et les depassements d'intervalle.
+Il est courant d'utiliser std::strtol avec verification du resultat et de endptr.
+Utilisé dans : CPP9/ex02 (acceptation seulement d'entiers positifs en argument).

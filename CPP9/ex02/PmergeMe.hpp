@@ -1,8 +1,15 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include <deque>
+#include <chrono>
+#include <cstdlib>
 #include <algorithm>
-#include <string>
+#include <iterator>
+#include <cstdlib>
+#include <sstream>
+#include <chrono>
+#include <iomanip>
 
 class PmergeMe
 {
@@ -12,6 +19,10 @@ class PmergeMe
 	PmergeMe &operator=(const PmergeMe &other);
 	~PmergeMe();
 
-	void sort(std::vector<int> &vec);
+	void sortVector(std::vector<int> &vec);
+	void sortDeque(std::deque<int> &deq);
 	
+  private:
+	void mergeVector(std::vector<int> &vec);
+	void mergeDeque(std::deque<int> &deq);
 };

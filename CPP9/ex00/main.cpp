@@ -21,3 +21,8 @@ int	main(int argc, char **argv)
 
 	return (0);
 }
+
+/*
+"Map" guarantees sorted order by key (date in lexicographical format YYYY-MM-DD)
+"lower_bound()" in O(log n) allows you to quickly find the earliest date.
+*/

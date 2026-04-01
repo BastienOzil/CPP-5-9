@@ -1,6 +1,5 @@
 #include "PmergeMe.hpp"
 
-/* gère la validation des entiers positifs */
 bool isValidPositiveInteger(const char *str, int &result)
 {
 	char *endptr;
@@ -45,7 +44,7 @@ int	main(int argc, char **argv)
 	std::cout << std::endl;
 
 	PmergeMe sorter;
-
+/* auto use to deduce the type */
 	auto start_vec = std::chrono::high_resolution_clock::now();
 	sorter.sortVector(vec_numbers);
 	auto end_vec = std::chrono::high_resolution_clock::now();

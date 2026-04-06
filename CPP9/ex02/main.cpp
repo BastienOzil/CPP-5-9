@@ -1,6 +1,5 @@
 #include "PmergeMe.hpp"
 
-/* gère la validation des entiers positifs */
 bool isValidPositiveInteger(const char *str, int &result)
 {
 	char *endptr;

@@ -167,12 +167,17 @@ Utilisé dans : CPP9/ex00 (BitcoinExchange).
 Recherche de date la plus proche avec lower_bound : retourne le premier element >= cle.
 Si la date exacte n'existe pas, on recule d'un iterateur pour recuperer la date precedente.
 Cette technique permet d'appliquer le dernier taux connu avant une date donnee.
-Utilisé dans : CPP9/ex00, ex02 (BitcoinExchange::findRateForDate).
+Utilisé dans : CPP9/ex00 (BitcoinExchange::findRateForDate).
 
 Validation numerique stricte avec std::strtod + endPtr : verifie qu'une chaine represente exactement un nombre.
 La conversion est valide seulement si toute la chaine est consommee (pas de caractere residuel).
 Cela evite d'accepter des entrees partielles ou mal formees.
 Utilisé dans : CPP9/ex00 (BitcoinExchange::parseValue).
+
+Validation de date YYYY-MM-DD : combine controle de format et verification calendrier.
+Le code valide les separateurs '-', les composantes numeriques et les bornes jour/mois.
+La gestion des annees bissextiles evite les dates invalides comme 2023-02-29.
+Utilisé dans : CPP9/ex00 (BitcoinExchange::isValidDate).
 
 Tokenisation avec std::istringstream : lit une chaine comme un flux d'entree.
 Elle permet d'extraire les tokens separes par espaces avec l'operateur >>.
@@ -182,27 +187,32 @@ Utilisé dans : CPP9/ex01 (RPN::evaluate).
 Machine a pile pour la notation polonaise inverse (RPN) : applique les operateurs sur les 2 derniers operandes.
 Chaque nombre est empile, puis un operateur depile deux valeurs et empile le resultat.
 Le calcul est valide si une seule valeur reste en fin d'evaluation.
-Utilisé dans : CPP9/ex01.
-
-Algorithme STL std::merge : fusionne deux plages deja triees en une plage triee.
-Combine avec une division recursive du tableau, il permet une approche type merge sort.
-Cette methode illustre une strategie divide-and-conquer en tri.
-Utilisé dans : CPP9/ex02 (PmergeMe::sort).
+Utilisé dans : CPP9/ex01 (RPN).
 
 Ford-Johnson Algorithm (Merge-Insertion Sort) : classe les elements en paires, les trie, puis trie les gagnants.
 Les perdants sont ensuite inseres en ordre croissant dans la sequence triee via recherche binaire.
 Cet algorithme minimise le nombre de comparaisons par rapport au merge sort classique.
 Utilisé dans : CPP9/ex02.
 
+Sequence de Jacobsthal : fournit un ordre d'insertion pour les elements pendants.
+Dans le merge-insertion sort, elle aide a reduire le nombre de comparaisons.
+Le code construit cette sequence puis l'utilise pour determiner l'ordre d'insertion.
+Utilisé dans : CPP9/ex02 (PmergeMe::jacobsthalSequence, mergeInsertVector, mergeInsertDeque).
+
+Recherche binaire d'insertion avec std::lower_bound : trouve la position d'insertion dans une plage triee.
+L'element est insere sans casser l'ordre croissant de la chaine principale.
+Cette operation est repetee pour chaque element pendant et pour le straggler.
+Utilisé dans : CPP9/ex02 (mergeInsertVector, mergeInsertDeque).
+
 Conteneur STL std::deque : stocke des elements avec acces rapide aux deux extremites.
 Contrairement au vector, il permet des insertions/suppressions efficaces au debut et a la fin.
-Il est generalement plus gourmand en memoire mais offre une meilleure localite en debut/fin.
+Il est utile pour comparer les performances avec std::vector dans le meme algorithme.
 Utilisé dans : CPP9/ex02.
 
-Chronomètrage avec std::chrono : mesure le temps d'execution precisement.
-std::chrono::high_resolution_clock::now() capture l'instant actuel.
-La difference entre deux instants donne la duree en unites personnalisables (microsecondes, nanosecondes, etc).
-Utilisé dans : CPP9/ex02 (mesure du temps de tri pour chaque conteneur).
+Chronometrage avec gettimeofday : mesure le temps en microsecondes.
+Le code convertit tv_sec et tv_usec en une valeur unique puis fait la difference avant/apres tri.
+Cela permet de comparer le cout de tri sur std::vector et std::deque.
+Utilisé dans : CPP9/ex02 (main.cpp).
 
 Paire de donnees avec std::pair : groupe deux elements de types potentiellement differents.
 Elle offre un moyen simple de manipuler et trier des couples (p.ex. paires et leurs gagnants).

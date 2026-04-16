@@ -2,14 +2,11 @@
 #include <iostream>
 #include <vector>
 #include <deque>
-#include <chrono>
 #include <cstdlib>
 #include <algorithm>
-#include <iterator>
-#include <cstdlib>
 #include <sstream>
-#include <chrono>
 #include <iomanip>
+#include <sys/time.h>
 
 class PmergeMe
 {
@@ -21,8 +18,10 @@ class PmergeMe
 
 	void sortVector(std::vector<int> &vec);
 	void sortDeque(std::deque<int> &deq);
-	
+
   private:
-	void mergeVector(std::vector<int> &vec);
-	void mergeDeque(std::deque<int> &deq);
+	void mergeInsertVector(std::vector<int> &vec);
+	void mergeInsertDeque(std::deque<int> &deq);
+
+	std::vector<int> jacobsthalSequence(int n);
 };

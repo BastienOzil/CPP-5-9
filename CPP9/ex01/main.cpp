@@ -21,9 +21,3 @@ int	main(int argc, char *argv[])
 
 	return (0);
 }
-
-/*
-"stack" enforces the natural LIFO order for RPN
-Simple interface: push/pop/top (no iteration)
-Does not require random access
-*/

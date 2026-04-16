@@ -132,7 +132,7 @@ Elle est utilisee quand une valeur est absente ou quand le conteneur est dans un
 Utilisé dans : CPP8/ex00, ex01.
 
 Conteneur STL std::vector : stocke des elements contigus en memoire.
-Il offre un acces rapide et des operations push_back efficaces en moyenne.
+Il offre un acces rapide et des operations push_back qui met la donnée en dernier element.
 Il est adapte pour accumuler des entiers puis appliquer des algorithmes STL.
 Utilisé dans : CPP8/ex01 (Span).
 
@@ -159,7 +159,7 @@ Utilisé dans : CPP8/ex02.
 
 --CPP9--
 
-Conteneur associatif STL std::map : stocke des paires cle/valeur triees par cle.
+Conteneur associatif STL (Standart Template Library) std::map : stocke des paires cle/valeur triees par cle.
 Il garantit l'ordre des cles et permet des recherches efficaces.
 Il est adapte pour lier une date (cle) a un taux de change (valeur).
 Utilisé dans : CPP9/ex00 (BitcoinExchange).
@@ -212,4 +212,5 @@ Utilisé dans : CPP9/ex02 (groupement des paires d'elements avant tri).
 Validation de nombre positif stricte : verifie qu'une chaine represente un entier positif.
 Elle detecte les nombres negatifs, les caracteres non numeriques et les depassements d'intervalle.
 Il est courant d'utiliser std::strtol avec verification du resultat et de endptr.
+strtol permet de convertir une chaine en long int.
 Utilisé dans : CPP9/ex02 (acceptation seulement d'entiers positifs en argument).
